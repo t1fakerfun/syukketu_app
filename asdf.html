@@ -1,0 +1,435 @@
+[slides]
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecture Registration Form Plan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;500;700&family=Noto+Sans+JP:wght@400;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* BASE SETUP */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #1a1a1a;
+            display: grid;
+            gap: 20px;
+            grid-template-columns: 1fr;
+            margin: 0;
+            min-height: 100vh;
+            padding: 20px 0;
+            place-items: center;
+        }
+
+        .slide-container {
+            align-items: flex-start;
+            background-color: #000;
+            border-radius: 8px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+            display: flex;
+            flex-direction: column;
+            font-family: 'Urbanist', 'Noto Sans JP', sans-serif;
+            height: 720px;
+            justify-content: center;
+            overflow: hidden;
+            padding: 60px;
+            position: relative;
+            width: 1280px;
+        }
+
+        .slide-container::after {
+            background: rgba(222, 255, 154, 0.3);
+            bottom: 50px;
+            content: '';
+            height: 1px;
+            left: 30px;
+            position: absolute;
+            right: 30px;
+        }
+
+        /* TYPOGRAPHY */
+        h1,
+        h2,
+        h3,
+        p,
+        li {
+            color: #f5f5f5;
+            margin: 0;
+        }
+
+        span.accent {
+            color: #deff9a;
+        }
+
+        h1 {
+            font-size: 64px;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .slide-title {
+            font-size: 48px;
+            font-weight: 500;
+            margin-bottom: 40px;
+            text-align: left;
+            width: 100%;
+        }
+
+        h3 {
+            font-size: 24px;
+            color: #deff9a;
+            margin-bottom: 15px;
+        }
+
+        p,
+        li {
+            font-size: 20px;
+            line-height: 1.5;
+            color: #daffde;
+        }
+
+        .content-area {
+            flex-grow: 1;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        /* LAYOUTS */
+        .title-layout {
+            text-align: left;
+        }
+
+        .subtitle {
+            font-size: 22px;
+            opacity: 0.8;
+            margin-top: 20px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            width: 100%;
+            align-items: start;
+        }
+
+        .two-column.tiled>div {
+            background: #111;
+            padding: 30px;
+            border-radius: 16px;
+            border: 1px solid #333;
+        }
+
+        .tiled-content {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            width: 100%;
+        }
+
+        .tile {
+            background: #111;
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            border: 1px solid #222;
+        }
+
+        .tile .icon {
+            font-size: 40px;
+            color: #deff9a;
+            margin-bottom: 20px;
+        }
+
+        .image-wrapper {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid #deff9a;
+            height: 380px;
+            width: 100%;
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        /* CHART & TABLE */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 18px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        th {
+            color: #deff9a;
+            font-weight: 600;
+            font-size: 22px;
+        }
+
+        td {
+            font-size: 20px;
+        }
+
+        /* BLEED IMAGE */
+        .bleed-image-layout {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            padding: 0;
+            align-items: start;
+        }
+
+        .bleed-text-side {
+            padding: 60px;
+        }
+
+        .bleed-image-side {
+            height: 720px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        /* HIGHLIGHT NUMBER */
+        .highlight-number {
+            font-size: 140px;
+            font-weight: 700;
+            color: #deff9a;
+            line-height: 1;
+            text-align: center;
+        }
+
+        /* BULLET LIST */
+        .bullet-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .bullet-list li {
+            position: relative;
+            padding-left: 45px;
+            margin-bottom: 20px;
+        }
+
+        .bullet-list i {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            color: #deff9a;
+            font-size: 24px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="slide-container" id="slide1">
+        <div class="title-layout">
+            <h1>Flutter × Isar<br><span class="accent">講義登録フォーム</span>の構築</h1>
+            <p class="subtitle">直感的なUIと堅牢なデータ保存の両立</p>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide2">
+        <div style="text-align: center; width: 100%;">
+            <h2 style="font-size: 72px;">UI & Data Binding</h2>
+            <div style="height: 4px; background: #deff9a; width: 120px; margin: 40px auto;"></div>
+            <p style="font-size: 28px;">ユーザーの入力をIsarモデルへと橋渡しする設計</p>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide3">
+        <h2 class="slide-title">必要な入力項目</h2>
+        <div class="content-area">
+            <div class="two-column tiled">
+                <div>
+                    <h3>1. 基本情報</h3>
+                    <p>講義名（名前）、教室名、担当教員など。`TextFormField`を使用してバリデーションを実装します。</p>
+                </div>
+                <div>
+                    <h3>2. 管理設定</h3>
+                    <p>許容欠席回数（デフォルトは5回など）。`Dropdown`やスライダーで直感的に選択可能にします。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide4">
+        <h2 class="slide-title">フォームの主要コンポーネント</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-i-cursor"></i></div>
+                    <h3>TextField</h3>
+                    <p>講義名入力用。`InputDecoration`でラベルを表示。</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-list-numeric"></i></div>
+                    <h3>Counter UI</h3>
+                    <p>欠席限度回数の増減ボタン。タップミスを防ぐ設計。</p>
+                </div>
+                <div class="tile">
+                    <div class="icon"><i class="fa-solid fa-floppy-disk"></i></div>
+                    <h3>Save Button</h3>
+                    <p>Isarの`writeTxn`を呼び出すトリガー。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide5">
+        <h2 class="slide-title">ユーザー体験の最適化</h2>
+        <div class="content-area">
+            <div class="two-column">
+                <div>
+                    <p>フォーム入力はユーザーにとって最も負荷のかかる作業です。オートフォーカスや、過去の入力履歴からのサジェスト機能を実装することで、登録時間を大幅に短縮できます。</p>
+                    <br>
+                    <p>特に「欠席限度」などの数値入力は、キーボードを開かずに増減できる独自ウィジェットが効果的です。</p>
+                </div>
+                <div class="image-wrapper">
+                    <img src="http://googleusercontent.com/image_collection/image_retrieval/14688839991564755586"
+                        alt="Mobile app UI registration form interface">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container bleed-image-layout" id="slide6">
+        <div class="bleed-text-side">
+            <h2 class="slide-title">実装コードの要点</h2>
+            <h3>Controllerの活用</h3>
+            <p>`TextEditingController`を使用して、入力内容をリアルタイムに取得します。</p>
+            <br>
+            <h3>保存処理</h3>
+            <p>「保存」ボタン押下時に、入力値を`Subject`クラスに代入し、`isar.subjects.put(subject)`を実行。非同期処理による待機アニメーションも重要です。</p>
+        </div>
+        <img class="bleed-image-side"
+            src="http://googleusercontent.com/image_collection/image_retrieval/3075288052121258317"
+            alt="Professional programmer working on Dart code">
+    </div>
+
+    <div class="slide-container" id="slide7">
+        <h2 class="slide-title">UIとIsarモデルの対応マップ</h2>
+        <div class="content-area">
+            <table>
+                <thead>
+                    <tr>
+                        <th>UIウィジェット</th>
+                        <th>Isarモデルフィールド</th>
+                        <th>データ型</th>
+                        <th>備考</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>TextFormField</td>
+                        <td>name</td>
+                        <td>String</td>
+                        <td>必須入力・重複不可</td>
+                    </tr>
+                    <tr>
+                        <td>NumberPicker</td>
+                        <td>limitCount</td>
+                        <td>int</td>
+                        <td>デフォルト: 5</td>
+                    </tr>
+                    <tr>
+                        <td>Switch / Checkbox</td>
+                        <td>isAutomatic</td>
+                        <td>bool</td>
+                        <td>自動出席のON/OFF</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide8">
+        <h2 class="slide-title">利便性の数値化</h2>
+        <div class="content-area">
+            <div class="two-column" style="align-items: center;">
+                <div class="highlight-number">1.5<span style="font-size: 40px;">sec</span></div>
+                <div>
+                    <h3>瞬時の登録完了</h3>
+                    <p>最適化されたUIにより、講義1つの登録にかかる時間はわずか1.5秒。事前の時間割登録を苦にさせないスピード感を提供します。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide9">
+        <h2 class="slide-title">実装の4ステップ</h2>
+        <div class="content-area">
+            <ul class="bullet-list">
+                <li><i class="fa-solid fa-code"></i> <strong>FormKeyの設定:</strong> `GlobalKey<FormState>
+                        `を使用してフォーム全体の状態を管理。</li>
+                <li><i class="fa-solid fa-shield"></i> <strong>バリデーション:</strong> 「名前が空ではないか」「数値が負ではないか」をチェック。</li>
+                <li><i class="fa-solid fa-database"></i> <strong>トランザクション実行:</strong> `writeTxn`内で安全にデータを永続化。</li>
+                <li><i class="fa-solid fa-bell"></i> <strong>フィードバック:</strong> `SnackBar`等で保存完了をユーザーに通知。</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide10">
+        <h2 class="slide-title">出席率の計算式と可視化</h2>
+        <div class="content-area">
+            <div id="formula-container" style="text-align: center; margin-bottom: 30px;">
+                <math display="block">
+                    <mi>Attendance Rate</mi>
+                    <mo>=</mo>
+                    <mfrac>
+                        <mi>Attended Classes</mi>
+                        <mi>Total Registered Classes</mi>
+                    </mfrac>
+                    <mo>×</mo>
+                    <mn>100</mn>
+                    <mo>%</mo>
+                </math>
+            </div>
+            <p style="text-align: center;">登録されたデータに基づき、学期末の予測出席率をグラフ化。警告ラインを下回らないよう管理を徹底します。</p>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide11">
+        <h2 class="slide-title">UIバリエーション案</h2>
+        <div class="content-area">
+            <div class="tiled-content">
+                <div class="image-wrapper"><img
+                        src="http://googleusercontent.com/image_collection/image_retrieval/16276905847875690852"
+                        alt="Form UI variation 1"></div>
+                <div class="image-wrapper"><img
+                        src="http://googleusercontent.com/image_collection/image_retrieval/8404166201997261640"
+                        alt="Form UI variation 2"></div>
+                <div class="image-wrapper"><img
+                        src="http://googleusercontent.com/image_collection/image_retrieval/14688839991564755586"
+                        alt="Form UI variation 3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-container" id="slide12">
+        <div style="text-align: center; width: 100%;">
+            <h2 style="font-size: 60px;">Questions?</h2>
+            <p style="font-size: 24px; margin-top: 20px;">次は、時間割画面との統合を進めましょう。</p>
+        </div>
+    </div>
+
+</body>
+
+</html>
