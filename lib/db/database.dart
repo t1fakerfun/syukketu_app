@@ -43,7 +43,7 @@ class AppDatabase extends _$AppDatabase {
 }
 
 class DatabaseService {
-  final AppDatabase db = AppDatabase();
+  final AppDatabase db = appDatabase;
 
   // 教科登録
   Future<void> registerSubject(String name, int limit) async {
@@ -181,6 +181,68 @@ class DatabaseService {
     await (db.delete(
       db.absentTable,
     )..where((tbl) => tbl.id.equals(absentId))).go();
+  }
+
+  // --- lib/db/database.dart の DatabaseService 内に追加 ---
+
+  // 指定した曜日・時限の「時間割データ」を取得する
+  Future<TimetableEntry?> getTimetableEntry(int dayOfWeek, int period) async {
+    return await (db.select(db.timetableEntries)..where(
+          (tbl) => tbl.dayOfWeek.equals(dayOfWeek) & tbl.period.equals(period),
+        ))
+        .getSingleOrNull();
+  }
+
+  // 「今日」すでにその授業の出欠（欠席・遅刻）データが作られているか確認する
+  Future<bool> hasAbsentRecordToday(
+    int subjectId,
+    int dayOfWeek,
+    int period,
+  ) async {
+    final now = DateTime.now();
+    final startOfDay = DateTime(now.year, now.month, now.day); // 今日の0時0分
+
+    final existing =
+        await (db.select(db.absentTable)..where(
+              (tbl) =>
+                  tbl.subjectId.equals(subjectId) &
+                  tbl.dayOfWeek.equals(dayOfWeek) &
+                  tbl.period.equals(period) &
+                  tbl.createdAt.isBiggerOrEqualValue(startOfDay),
+            )) // 今日作られたデータか
+            .get();
+
+    return existing.isNotEmpty; // データがあればtrue
+  }
+
+  Future<void> confirmAbsentAndDecrementLimit(int absentId, int type) async {
+    // ① まず欠席レコードを確定
+    await confirmAbsentRecord(absentId, type);
+
+    // ② typeが0（欠席）の場合のみLimitを減らす
+    //    遅刻（type:1）の場合は減らさない（仕様に応じて変更してください）
+    // 欠席レコードからsubjectIdを取得
+    final absent = await (db.select(
+      db.absentTable,
+    )..where((tbl) => tbl.id.equals(absentId))).getSingleOrNull();
+
+    if (absent == null) return;
+
+    // 教科の現在のlimitCountを取得
+    final subject = await (db.select(
+      db.subjects,
+    )..where((tbl) => tbl.id.equals(absent.subjectId))).getSingleOrNull();
+
+    if (subject == null) return;
+
+    // limitCountを1減らす（0以下にはしない）
+    int newLimit;
+    if (type == 1) {
+      newLimit = (subject.limitCount - 1).clamp(0, 999);
+    } else {
+      newLimit = (subject.limitCount - 2).clamp(0, 999);
+    }
+    await updateSubjectLimit(subject.id, newLimit);
   }
 }
 

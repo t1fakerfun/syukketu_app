@@ -158,7 +158,10 @@ class _CheckAndAnalyzePageState extends State<CheckAndAnalyzePage> {
                                         foregroundColor: Colors.white,
                                       ),
                                       onPressed: () => _dbService
-                                          .confirmAbsentRecord(absent.id, 0),
+                                          .confirmAbsentAndDecrementLimit(
+                                            absent.id,
+                                            0,
+                                          ),
                                       child: const Text('欠席'),
                                     ),
                                     // 遅刻として確定 (type: 1)
@@ -168,7 +171,10 @@ class _CheckAndAnalyzePageState extends State<CheckAndAnalyzePage> {
                                         foregroundColor: Colors.white,
                                       ),
                                       onPressed: () => _dbService
-                                          .confirmAbsentRecord(absent.id, 1),
+                                          .confirmAbsentAndDecrementLimit(
+                                            absent.id,
+                                            1,
+                                          ),
                                       child: const Text('遅刻'),
                                     ),
                                     // 誤判定だった場合（削除）

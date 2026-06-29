@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syukketu_app/db/database.dart';
+import 'package:syukketu_app/services/location_service.dart';
+import 'package:syukketu_app/services/attendance_checker.dart';
 
 final _dbService = DatabaseService();
 
@@ -88,6 +90,20 @@ class _RegisterPageState extends State<RegisterPage> {
                 }
               },
               child: const Text('登録'),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+            onPressed: () async {
+              final checker = AttendanceChecker();
+              await checker.executeAutoCheck();
+              // テストなので完了したらスナックバーを出す
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('自動出欠チェックが完了しました。コンソールを確認してください。')),
+                );
+              }
+            },
+            child: const Text('自動判定をテスト実行'),
             ),
           ],
         ),
